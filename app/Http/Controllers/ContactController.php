@@ -51,17 +51,12 @@ class ContactController extends Controller
             Log::info('Email sent successfully');
 
         } catch (\Throwable $e) {
-
-            Log::error('Email sending failed', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'message' => 'Email sending failed.'
-            ], 500);
-        }
+    return response()->json([
+        'error' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
+    ], 500);
+}
 
         return response()->json([
             'message' => 'Contact form submitted successfully.'
