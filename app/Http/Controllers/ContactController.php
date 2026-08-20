@@ -44,19 +44,7 @@ class ContactController extends Controller
             'contact_id' => $contact->id,
         ]);
 
-        try {
-            Mail::to(env('CONTACT_EMAIL_ADDRESS'))
-                ->send(new ContactReceived($contact));
-
-            Log::info('Email sent successfully');
-
-        } catch (\Throwable $e) {
-    return response()->json([
-        'error' => $e->getMessage(),
-        'file' => $e->getFile(),
-        'line' => $e->getLine(),
-    ], 500);
-}
+        Mail::to(env('CONTACT_EMAIL_ADDRESS'))->send(new ContactReceived($contact));
 
         return response()->json([
             'message' => 'Contact form submitted successfully.'
