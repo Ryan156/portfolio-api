@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Mail\ContactReceived;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -40,6 +41,11 @@ class ContactController extends Controller
         $contact = Contact::create($validatedData); // Save the contact form data to the database
 
         // Send email notification
+        Log::info('Contact saved, about to send email', [
+    'contact_id' => $contact->id,
+]);
+Log::info('Email sent successfully');
+
         Mail::to(env('CONTACT_EMAIL_ADDRESS'))->send(new ContactReceived($contact));
 
         return response()->json(['message' => 'Contact form submitted successfully.'], 200);
