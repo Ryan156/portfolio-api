@@ -38,16 +38,33 @@ class ContactController extends Controller
         // You can save the validated data to the database or send an email here
         // For example, you can create a new Contact model instance and save it
 
-        $contact = Contact::create($validatedData); // Save the contact form data to the database
+        $contact = Contact::create($validatedData);
 
-        // Send email notification
         Log::info('Contact saved, about to send email', [
-    'contact_id' => $contact->id,
-]);
-Log::info('Email sent successfully');
+            'contact_id' => $contact->id,
+        ]);
 
-        Mail::to(env('CONTACT_EMAIL_ADDRESS'))->send(new ContactReceived($contact));
+        try {
+            Mail::to(env('CONTACT_EMAIL_ADDRESS'))
+                ->send(new ContactReceived($contact));
 
-        return response()->json(['message' => 'Contact form submitted successfully.'], 200);
-    }
+            Log::info('Email sent successfully');
+
+        } catch (\Throwable $e) {
+
+            Log::error('Email sending failed', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'message' => 'Email sending failed.'
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'Contact form submitted successfully.'
+        ], 200);
+            }
 }
