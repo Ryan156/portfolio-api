@@ -40,10 +40,6 @@ class ContactController extends Controller
 
         $contact = Contact::create($validatedData);
 
-        Log::info('Contact saved, about to send email', [
-            'contact_id' => $contact->id,
-        ]);
-
         Mail::to(env('CONTACT_EMAIL_ADDRESS'))->send(new ContactReceived($contact));
 
         return response()->json([
