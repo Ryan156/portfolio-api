@@ -1,38 +1,45 @@
-# Portfolio API
+# Portfolio Contact API
 
-Laravel REST API powering the contact form for my portfolio website.
+Backend API for the [Ryan Lim WH Portfolio](https://portfolio-ryanlimwh.com), built with Laravel and deployed on Render.
 
-## Tech Stack
-
-- Laravel
-- PHP
-- MySQL
-- Eloquent ORM
-- hCaptcha
-- Resend SMTP
-- Cloudflare Email Routing
+The API handles portfolio contact form submissions, validates and stores messages, verifies hCaptcha submissions, applies rate limiting, and sends email notifications through Resend.
 
 ## Features
 
-- Contact form API
-- Server-side validation
+- Contact form API endpoint
+- Request validation
 - hCaptcha verification
-- MySQL persistence
-- Email notifications
-- Visitor `Reply-To` handling
-- API rate limiting
-- CORS configuration
+- PostgreSQL database storage
+- Email notifications via Resend API
+- Visitor email used as `Reply-To`
+- CORS configuration for the portfolio frontend
+- IP-based rate limiting
+- Production deployment with Docker and Render
+- Environment-based configuration for secrets
+
+## Tech Stack
+
+- **Laravel 13**
+- **PHP 8.3**
+- **PostgreSQL**
+- **Resend**
+- **hCaptcha**
+- **Docker**
+- **Render**
 
 ## API
 
-### POST `/api/contact`
+### `POST /api/contact`
 
-Accepts:
+Accepts a portfolio contact form submission.
+
+#### Request
 
 ```json
 {
   "name": "John Doe",
   "email": "john@example.com",
-  "subject": "Job Opportunity",
-  "message": "I'd like to discuss..."
+  "subject": "Project Inquiry",
+  "message": "I'd like to discuss a project with you.",
+  "captchaToken": "hcaptcha-token"
 }
